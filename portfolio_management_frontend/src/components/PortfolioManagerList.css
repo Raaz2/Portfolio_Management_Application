@@ -1,0 +1,45 @@
+/* In your src/components/PortfolioManagerList.css */
+.portfolio-managers-list {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f6f6f6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.manager-list {
+  list-style: none;
+  padding: 0;
+}
+
+.manager-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.manager-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.manager-status {
+  color: #2ecc71;
+}
+
+.manager-role {
+  color: #3498db;
+}
+
+.manager-bio {
+  color: #888;
+}
+
+.manager-start-date {
+  color: #e67e22;
+}

@@ -2,8 +2,10 @@ from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from models.portfolio_manager import PortfolioManager
 from bson import ObjectId
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)  # Initialize CORS
 app.config["MONGO_URI"] = "mongodb://localhost:27017/portfolio_management_system"
 mongo = PyMongo(app)
 
