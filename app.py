@@ -61,7 +61,7 @@ def update_portfolio_manager(id):
 
 
 
-@app.route('/api/portfolio_managers', methods=['POST'])
+@app.route('/api/portfolioManagers', methods=['POST'])
 def add_portfolio_manager():
     data = request.json  # Access the JSON data sent in the request body
 
