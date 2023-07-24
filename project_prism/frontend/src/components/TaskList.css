@@ -1,0 +1,66 @@
+/* TaskList.css */
+
+.task-list {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  h2 {
+    margin-bottom: 15px;
+  }
+  
+  .task-list-items {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .task-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .task-name {
+    font-weight: bold;
+  }
+  
+  .task-description,
+  .task-priority,
+  .task-assigned-to,
+  .task-project-name,
+  .task-status {
+    margin: 5px 0;
+  }
+  
+  button {
+    margin-right: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .success-message {
+    margin-top: 10px;
+    color: #28a745;
+  }
+  
+  .update-form {
+    margin-top: 20px;
+  }
+  
+  .add-form {
+    margin-top: 20px;
+  }
+  
