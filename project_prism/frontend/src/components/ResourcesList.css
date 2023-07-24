@@ -1,0 +1,88 @@
+/* Resource List Container */
+.resources-list {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Resource Item */
+  .resource-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  /* Resource Name */
+  .resource-name {
+    font-weight: bold;
+  }
+  
+  /* Update and Delete Buttons */
+  .resource-item button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .resource-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Add Resource Form */
+  .add-resource-form {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .add-resource-form h2 {
+    margin-bottom: 15px;
+  }
+  
+  .add-resource-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .add-resource-form input[type='text'],
+  .add-resource-form textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-resource-form button[type='submit'] {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .add-resource-form button[type='submit']:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Success Message */
+  .success-message {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: 1px solid #28a745;
+    border-radius: 5px;
+    background-color: #d4edda;
+    color: #155724;
+  }
+  

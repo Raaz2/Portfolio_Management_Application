@@ -1,0 +1,74 @@
+/* PortfolioManagerList.css */
+.portfolio-managers-list {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.portfolio-managers-list h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.portfolio-managers-list button {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.manager-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.manager-item {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.manager-item p {
+  margin: 5px 0;
+}
+
+.manager-item button {
+  background-color: #28a745;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.update-form {
+  margin-top: 20px;
+}
+
+.success-message {
+  background-color: #28a745;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.error-message {
+  background-color: #dc3545;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
