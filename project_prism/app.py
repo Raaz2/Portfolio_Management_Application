@@ -8,11 +8,15 @@ from bson import ObjectId
 from flask_cors import CORS
 import json
 
+from pymongo import MongoClient
+
 app = Flask(__name__)
 CORS(app)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/project_prism_db"
-mongo = PyMongo(app)
 
+mongo_uri = 'mongodb+srv://Rajeev:AtlasRajeev@cluster0.qpx1rwd.mongodb.net/?retryWrites=true&w=majority'
+
+client = MongoClient(mongo_uri)
+db = client.Mongo
 
 class JSONEncoderWithObjectId(json.JSONEncoder):
     def default(self, o):
@@ -23,8 +27,6 @@ class JSONEncoderWithObjectId(json.JSONEncoder):
 
 app.json_encoder = JSONEncoderWithObjectId
 
-# Assuming you have imported the required modules and defined the Task class and other configurations
-
 
 @app.route('/api/tasks', methods=['POST'])
 def create_task():
@@ -33,10 +35,10 @@ def create_task():
                 data['projectName'], data['status'])
 
     # Insert the new task data into the MongoDB collection
-    inserted_task_id = mongo.db.tasks.insert_one(task.json()).inserted_id
+    inserted_task_id = db.tasks.insert_one(task.json()).inserted_id
 
     # Fetch the newly inserted task from the MongoDB collection
-    inserted_task = mongo.db.tasks.find_one({'_id': ObjectId(inserted_task_id)})
+    inserted_task = db.tasks.find_one({'_id': ObjectId(inserted_task_id)})
 
     # Convert the ObjectId to a string for serialization
     inserted_task['_id'] = str(inserted_task['_id'])
@@ -49,7 +51,7 @@ def create_task():
 @app.route('/api/tasks', methods=['GET'])
 def get_all_tasks():
     # Fetch all the tasks from the MongoDB collection
-    all_tasks = list(mongo.db.tasks.find())
+    all_tasks = list(db.tasks.find())
 
     # Convert the ObjectId to a string for serialization
     for task in all_tasks:
@@ -69,7 +71,7 @@ def get_all_tasks():
 @app.route('/api/tasks/<string:task_id>', methods=['GET'])
 def get_task_by_id(task_id):
     # Fetch the Task by ID from the MongoDB collection
-    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    task = db.tasks.find_one({"_id": ObjectId(task_id)})
 
     # If the task is not found, return an error response
     if not task:
@@ -91,7 +93,7 @@ def update_task(task_id):
         return jsonify({"success": False, "message": "Invalid task ID."}), 400
 
     # Check if the task with the given ID exists
-    task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    task = db.tasks.find_one({"_id": ObjectId(task_id)})
     if not task:
         return jsonify({"success": False, "message": "Task not found."}), 404
 
@@ -104,10 +106,10 @@ def update_task(task_id):
     task["assignedTo"] = data.get("assignedTo", task["assignedTo"])
 
     # Update the task in the database
-    mongo.db.tasks.update_one({"_id": ObjectId(task_id)}, {"$set": task})
+    db.tasks.update_one({"_id": ObjectId(task_id)}, {"$set": task})
 
     # Fetch the updated task from the database
-    updated_task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
+    updated_task = db.tasks.find_one({"_id": ObjectId(task_id)})
     # Convert the ObjectId to a string for serialization
     updated_task['_id'] = str(updated_task['_id'])
 
@@ -118,7 +120,7 @@ def update_task(task_id):
 @app.route('/api/tasks/<string:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     # Delete the Task from the database based on the provided ID
-    deleted_task = mongo.db.tasks.find_one_and_delete(
+    deleted_task = db.tasks.find_one_and_delete(
         {"_id": ObjectId(task_id)})
 
     if deleted_task:
@@ -143,11 +145,11 @@ def create_resource():
     )
 
     # Insert the new_resource data into the MongoDB collection
-    inserted_resource_id = mongo.db.resources.insert_one(
+    inserted_resource_id = db.resources.insert_one(
         new_resource.json()).inserted_id
 
     # Fetch the newly inserted resource from the MongoDB collection
-    inserted_resource = mongo.db.resources.find_one(
+    inserted_resource = db.resources.find_one(
         {'_id': ObjectId(inserted_resource_id)})
 
     # Convert the ObjectId to a string for serialization
@@ -161,7 +163,7 @@ def create_resource():
 @app.route('/api/resources', methods=['GET'])
 def get_all_resources():
     # Fetch all the resources from the MongoDB collection
-    all_resources = list(mongo.db.resources.find())
+    all_resources = list(db.resources.find())
 
     # Convert the ObjectId to a string for serialization
     for resource in all_resources:
@@ -181,7 +183,7 @@ def get_all_resources():
 @app.route('/api/resources/<string:resource_id>', methods=['GET'])
 def get_resource_by_id(resource_id):
     # Fetch the Resource by ID from the MongoDB collection
-    resource = mongo.db.resources.find_one({"_id": ObjectId(resource_id)})
+    resource = db.resources.find_one({"_id": ObjectId(resource_id)})
 
     # If the resource is not found, return an error response
     if not resource:
@@ -209,7 +211,7 @@ def update_resource(resource_id):
         return jsonify({"success": False, "message": "Invalid resource ID."}), 400
 
     # Check if the resource with the given ID exists
-    resource = mongo.db.resources.find_one({"_id": ObjectId(resource_id)})
+    resource = db.resources.find_one({"_id": ObjectId(resource_id)})
     if not resource:
         return jsonify({"success": False, "message": "Resource not found."}), 404
 
@@ -223,11 +225,11 @@ def update_resource(resource_id):
         "availability", resource["availability"])
 
     # Update the resource in the database
-    mongo.db.resources.update_one(
+    db.resources.update_one(
         {"_id": ObjectId(resource_id)}, {"$set": resource})
 
     # Fetch the updated resource from the database
-    updated_resource = mongo.db.resources.find_one(
+    updated_resource = db.resources.find_one(
         {"_id": ObjectId(resource_id)})
     # Convert the ObjectId to a string for serialization
     updated_resource['_id'] = str(updated_resource['_id'])
@@ -239,7 +241,7 @@ def update_resource(resource_id):
 @app.route('/api/resources/<string:resource_id>', methods=['DELETE'])
 def delete_resource(resource_id):
     # Delete the Resource from the database based on the provided ID
-    deleted_resource = mongo.db.resources.find_one_and_delete(
+    deleted_resource = db.resources.find_one_and_delete(
         {"_id": ObjectId(resource_id)})
 
     if deleted_resource:
@@ -259,11 +261,11 @@ def create_project():
                       data['start_date'], data['end_date'], data['manager_id'], data['status'])
 
     # Insert the new project data into the MongoDB collection
-    inserted_project_id = mongo.db.project_collection.insert_one(
+    inserted_project_id = db.project_collection.insert_one(
         project.json()).inserted_id
 
     # Fetch the newly inserted project from the MongoDB collection
-    inserted_project = mongo.db.project_collection.find_one(
+    inserted_project = db.project_collection.find_one(
         {'_id': ObjectId(inserted_project_id)})
 
     # Convert the ObjectId to a string for serialization
@@ -271,7 +273,7 @@ def create_project():
 
     # Add the project ID to the projects list of the corresponding portfolio manager
     manager_id = ObjectId(data['manager_id'])
-    mongo.db.portfolio_manager.update_one(
+    db.portfolio_manager.update_one(
         {'_id': manager_id},
         {'$push': {'projects': inserted_project_id}}
     )
@@ -284,7 +286,7 @@ def create_project():
 @app.route('/api/projects', methods=['GET'])
 def get_all_projects():
     # Fetch all the projects from the MongoDB collection
-    all_projects = list(mongo.db.project_collection.find())
+    all_projects = list(db.project_collection.find())
 
     # Convert the ObjectId to a string for serialization
     for project in all_projects:
@@ -304,7 +306,7 @@ def get_all_projects():
 @app.route('/api/projects/<string:project_id>', methods=['GET'])
 def get_project_by_id(project_id):
     # Fetch the Project by ID from the MongoDB collection
-    project = mongo.db.project_collection.find_one(
+    project = db.project_collection.find_one(
         {"_id": ObjectId(project_id)})
 
     # If the project is not found, return an error response
@@ -328,7 +330,7 @@ def update_project(project_id):
         return jsonify({"success": False, "message": "Invalid project ID."}), 400
 
     # Check if the project with the given ID exists
-    project = mongo.db.project_collection.find_one(
+    project = db.project_collection.find_one(
         {"_id": ObjectId(project_id)})
     if not project:
         return jsonify({"success": False, "message": "Project not found."}), 404
@@ -342,11 +344,11 @@ def update_project(project_id):
     project["status"] = data.get("status",project["status"])
 
     # Update the project in the database
-    mongo.db.project_collection.update_one(
+    db.project_collection.update_one(
         {"_id": ObjectId(project_id)}, {"$set": project})
 
     # Fetch the updated project from the database
-    updated_project = mongo.db.project_collection.find_one(
+    updated_project = db.project_collection.find_one(
         {"_id": ObjectId(project_id)})
     # Convert the ObjectId to a string for serialization
     updated_project['_id'] = str(updated_project['_id'])
@@ -358,7 +360,7 @@ def update_project(project_id):
 @app.route('/api/projects/<string:project_id>', methods=['DELETE'])
 def delete_project(project_id):
     # Delete the Project from the database based on the provided ID
-    deleted_project = mongo.db.project_collection.find_one_and_delete(
+    deleted_project = db.project_collection.find_one_and_delete(
         {"_id": ObjectId(project_id)})
 
     if deleted_project:
@@ -374,7 +376,7 @@ def delete_project(project_id):
 @app.route('/api/portfolioManagers/<string:id>', methods=['DELETE'])
 def delete_portfolio_manager(id):
     # Delete the Portfolio Manager from the database based on the provided ID
-    deleted_manager = mongo.db.portfolio_manager.find_one_and_delete(
+    deleted_manager = db.portfolio_manager.find_one_and_delete(
         {"_id": ObjectId(id)})
 
     if deleted_manager:
@@ -399,7 +401,7 @@ def update_portfolio_manager(id):
         return jsonify({"success": False, "message": "Invalid portfolio manager ID."}), 400
 
     # Check if the portfolio manager with the given ID exists
-    portfolio_manager = mongo.db.portfolio_manager.find_one(
+    portfolio_manager = db.portfolio_manager.find_one(
         {"_id": ObjectId(id)})
     if not portfolio_manager:
         return jsonify({"success": False, "message": "Portfolio manager not found."}), 404
@@ -414,11 +416,11 @@ def update_portfolio_manager(id):
         "start_date", portfolio_manager["start_date"])
 
     # Update the portfolio manager in the database
-    mongo.db.portfolio_manager.update_one(
+    db.portfolio_manager.update_one(
         {"_id": ObjectId(id)}, {"$set": portfolio_manager})
 
     # Fetch the updated manager from the database
-    updated_manager = mongo.db.portfolio_manager.find_one(
+    updated_manager = db.portfolio_manager.find_one(
         {"_id": ObjectId(id)})
     # Convert the ObjectId to a string for serialization
     updated_manager['_id'] = str(updated_manager['_id'])
@@ -436,9 +438,9 @@ def add_portfolio_manager():
         bio=data['bio'],
         start_date=data['start_date']
     )
-    inserted_manager_id = mongo.db.portfolio_manager.insert_one(
+    inserted_manager_id = db.portfolio_manager.insert_one(
         new_manager.json()).inserted_id
-    inserted_manager = mongo.db.portfolio_manager.find_one(
+    inserted_manager = db.portfolio_manager.find_one(
         {'_id': ObjectId(inserted_manager_id)})
     inserted_manager['_id'] = str(inserted_manager['_id'])
     return jsonify(inserted_manager)
@@ -447,7 +449,7 @@ def add_portfolio_manager():
 @app.route('/api/portfolioManagers', methods=['GET'])
 def get_all_portfolio_managers():
     # Fetch all the portfolio managers from the MongoDB collection
-    all_managers = list(mongo.db.portfolio_manager.find())
+    all_managers = list(db.portfolio_manager.find())
 
     # Convert the ObjectId to a string for serialization in projects field
     for manager in all_managers:
@@ -468,7 +470,7 @@ def get_all_portfolio_managers():
 @app.route('/api/portfolioManagers/<string:manager_id>', methods=['GET'])
 def get_portfolio_manager_by_id(manager_id):
     # Fetch the Portfolio Manager by ID from the MongoDB collection
-    manager = mongo.db.portfolio_manager.find_one(
+    manager = db.portfolio_manager.find_one(
         {"_id": ObjectId(manager_id)})
 
     # If the manager is not found, return an error response
