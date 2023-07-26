@@ -1,0 +1,7 @@
+version: 1
+buildCommand:
+  - python -m venv venv
+  - source venv/bin/activate
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+startCommand: gunicorn --bind 0.0.0.0:$PORT wsgi:app
