@@ -1,6 +1,6 @@
 # Portfolio Management System
 
-The Portfolio Management System is a web application designed to help users manage their portfolios and projects efficiently. It allows users to add, update, and delete portfolio managers, view their details, and assign projects to them. Additionally, users can also add, update, and delete projects and view the tasks associated with each project.
+Portfolio Management System is a web application designed to help users manage their portfolios and projects efficiently. It allows users to add, update, and delete portfolio managers, view their details, and assign projects to them. Additionally, users can also add, update, and delete projects and view the tasks associated with each project.
 
 ## Features
 
